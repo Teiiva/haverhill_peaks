@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Tree - Profil Personnel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Image de fond */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("Image1_004.png");
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            transition: transform 0.5s ease;
+        }
+        
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+        
+        /* Conteneur principal */
+        .container {
+            position: relative;
+            z-index: 3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        /* Carte avec effet flou Apple */
+        .blur-card {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.36);
+            padding: 2.5rem 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .blur-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+        }
+        
+        /* Section profil */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+        
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 1.5rem;
+            transition: transform 0.5s ease, border-color 0.5s ease;
+        }
+        
+        .profile-pic:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        
+        .profile-tagline {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.5;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        
+        /* Liens */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+        
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(8px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .link-item:hover::before {
+            left: 100%;
+        }
+        
+        .link-logo {
+            font-size: 1.8rem;
+            margin-right: 1.2rem;
+            width: 40px;
+            text-align: center;
+        }
+        
+        .link-content {
+            flex: 1;
+        }
+        
+        .link-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        
+        .link-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .link-arrow {
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .link-item:hover .link-arrow {
+            transform: translateX(5px);
+            opacity: 1;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            padding-top: 1rem;
+            animation: fadeIn 1s ease-out 0.8s both;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .blur-card {
+                padding: 2rem 1.5rem;
+                border-radius: 20px;
+            }
+            
+            .profile-pic {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .profile-name {
+                font-size: 1.5rem;
+            }
+            
+            .link-item {
+                padding: 1rem 1.2rem;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .blur-card {
+                padding: 1.5rem 1rem;
+            }
+            
+            .link-logo {
+                font-size: 1.5rem;
+                margin-right: 1rem;
+            }
+            
+            .link-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Image de fond -->
+    <div class="background-image" id="backgroundImage"></div>
+    <div class="background-overlay"></div>
+    
+    <!-- Contenu principal -->
+    <div class="container">
+        <div class="blur-card">
+            <!-- Section profil -->
+            <div class="profile-section">
+                <img src="unnamed.jpg" alt="Photo de profil" class="profile-pic">
+                <h1 class="profile-name">Haverhill Peaks</h1>
+                <p class="profile-tagline">Retrouvez nos musiques sur toutes vos plateformes préférées</p>
+            </div>
+            
+            <!-- Liens -->
+            <div class="links-container">
+                <a href="https://www.youtube.com/@haverhillpeaks1384/videos" target="_blank" class="link-item">
+                    <div class="link-logo">
+                        <i class="fab fa-youtube"></i> <!-- Modifier l'icône -->
+                    </div>
+                    <div class="link-content">
+                        <div class="link-title">YouTube</div> <!-- Modifier le titre -->
+                        <div class="link-description">Clips et sessions live</div> <!-- Modifier la description -->
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+                
+                <a href="https://link.deezer.com/s/31P9YdKZyGk6y0sgQLRxI" target="_blank" class="link-item">
+                    <div class="link-logo">
+                        <i class="fab fa-deezer"></i> <!-- Icône Deezer -->
+                    </div>
+                    <div class="link-content">
+                        <div class="link-title">Deezer</div>
+                        <div class="link-description">Écoutez notre musique sur Deezer</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+                
+                <a href="https://open.spotify.com/intl-fr/artist/18pLC3sYpFzEHnI5kpQxO8?si=d5HdKPtESraDC0Kya7cewg" target="_blank" class="link-item">
+                    <div class="link-logo">
+                        <i class="fab fa-spotify"></i> <!-- Icône Spotify -->
+                    </div>
+                    <div class="link-content">
+                        <div class="link-title">Spotify</div>
+                        <div class="link-description">Écoutez nos titres sur Spotify</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://soundcloud.com/haverhill-peaks" target="_blank" class="link-item">
+                    <div class="link-logo">
+                        <i class="fab fa-soundcloud"></i> <!-- Icône SoundCloud -->
+                    </div>
+                    <div class="link-content">
+                        <div class="link-title">SoundCloud</div>
+                        <div class="link-description">Écoutez nos morceaux sur SoundCloud</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://pypoproduction.com/artiste/haverhill-peaks/" target="_blank" class="link-item">
+                    <div class="link-logo">
+                        <i class="fas fa-record-vinyl"></i> <!-- Icône pour production musicale -->
+                    </div>
+                    <div class="link-content">
+                        <div class="link-title">PYPO Production</div>
+                        <div class="link-description">Notre page producteur</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://www.instagram.com/haverhillpeaks/?hl=fr" target="_blank" class="link-item">
+                    <div class="link-logo">
+                        <i class="fab fa-instagram"></i> <!-- Icône Instagram -->
+                    </div>
+                    <div class="link-content">
+                        <div class="link-title">Instagram</div>
+                        <div class="link-description">Suivez-nous sur Instagram</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://www.facebook.com/haverhillpeaks/" target="_blank" class="link-item">
+                    <div class="link-logo">
+                        <i class="fab fa-facebook"></i> <!-- Icône Facebook -->
+                    </div>
+                    <div class="link-content">
+                        <div class="link-title">Facebook</div>
+                        <div class="link-description">Rejoignez-nous sur Facebook</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Merci pour le soutien <i class="fas fa-heart" style="color: #ff4d4d;"></i></p>
+        </div>
+    </div>
+
+    <script>
+        // Effet de parallaxe sur l'image de fond
+        document.addEventListener('mousemove', function(e) {
+            const background = document.getElementById('backgroundImage');
+            const x = (window.innerWidth - e.pageX * 0.5) / 100;
+            const y = (window.innerHeight - e.pageY * 0.5) / 100;
+            background.style.transform = `translateX(${x}px) translateY(${y}px)`;
+        });
+        
+        // Animation d'apparition des éléments au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animation des éléments déjà définie en CSS
+            console.log("Page Link Tree chargée avec succès!");
+        });
+    </script>
+</body>
+</html>
