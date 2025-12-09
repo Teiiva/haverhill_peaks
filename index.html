@@ -6,7 +6,7 @@
     <title>Link Tree - Profil Personnel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-                * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -21,30 +21,31 @@
             position: relative;
         }
         
-        /* Amélioration de l'image de fond pour éviter les bandes noires */
+        /* SOLUTION RADICALE POUR LES BORDS NOIRS */
         .background-image {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: -10%;
+            left: -10%;
+            width: 120vw;
+            height: 120vh;
             background-image: url("Image1_004.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             z-index: 1;
             transition: transform 0.5s ease;
+            filter: blur(0px);
         }
         
-        /* Ajout pour garantir la couverture complète */
-        .background-image::before {
+        /* Alternative avec scale pour garantir la couverture */
+        .background-image::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.15);
             z-index: 1;
         }
         
@@ -434,4 +435,5 @@
 </body>
 
 </html>
+
 
