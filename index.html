@@ -73,30 +73,47 @@
             width: 100%;
         }
         
-        /* Stylisation de la barre de défilement */
+        /* BARRE DE DÉFILEMENT FLOTTANTE ET ÉLÉGANTE */
+        /* Style principal - Chrome, Safari, Edge */
         body::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
         
+        /* Supprimer le fond derrière la scrollbar */
         body::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+            background: transparent;
         }
         
+        /* Barre de défilement flottante */
         body::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             border-radius: 10px;
-            border: 2px solid rgba(0, 0, 0, 0.2);
+            border: 2px solid transparent;
+            background-clip: padding-box;
         }
         
         body::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid transparent;
+            background-clip: padding-box;
         }
         
-        /* Pour Firefox */
+        /* Supprimer les flèches */
+        body::-webkit-scrollbar-button {
+            display: none;
+        }
+        
+        /* Pour Firefox - scrollbar flottante */
         body {
             scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
+            scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+        }
+        
+        /* Pour Edge (ancienne version) */
+        @supports (-ms-ime-align: auto) {
+            body {
+                -ms-overflow-style: -ms-autohiding-scrollbar;
+            }
         }
         
         /* Carte avec effet flou Apple */
@@ -285,7 +302,7 @@
             
             /* Barre de défilement plus fine sur mobile */
             body::-webkit-scrollbar {
-                width: 6px;
+                width: 5px;
             }
         }
         
@@ -305,6 +322,10 @@
             
             .link-title {
                 font-size: 1.1rem;
+            }
+            
+            body::-webkit-scrollbar {
+                width: 4px;
             }
         }
     </style>
@@ -435,5 +456,6 @@
 </body>
 
 </html>
+
 
 
